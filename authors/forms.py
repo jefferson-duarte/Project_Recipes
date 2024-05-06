@@ -33,13 +33,13 @@ class RegisterForm(forms.ModelForm):
         add_placeholder(self.fields['username'], 'Your username')
         add_placeholder(self.fields['email'], 'Your email')
         add_placeholder(self.fields['last_name'], 'Ex.: Doe')
-        add_placeholder(self.fields['first_name'], 'E.: John')
+        add_placeholder(self.fields['first_name'], 'Ex.: John')
+        add_placeholder(self.fields['password'], 'Type your password')
+        add_placeholder(self.fields['password2'], 'Reapet your password')
 
     password = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Your password'
-        }),
+        widget=forms.PasswordInput(),
         error_messages={
             'required': 'Password must not be empty'
         },
@@ -50,14 +50,14 @@ class RegisterForm(forms.ModelForm):
         ),
         validators=[
             strong_password
-        ]
+        ],
+        label='Password'
     )
 
     password2 = forms.CharField(
         required=True,
-        widget=forms.PasswordInput(attrs={
-            'placeholder': 'Repeat your password'
-        })
+        widget=forms.PasswordInput(),
+        label='Password2'
     )
 
     class Meta:
@@ -83,36 +83,6 @@ class RegisterForm(forms.ModelForm):
                 'required': 'This field must not be empty'
             }
         }
-
-        widgets = {
-            'password': forms.PasswordInput(attrs={
-                'placeholder': 'Type your password here'
-            })
-        }
-
-    def clean_password(self):
-        data = self.cleaned_data.get('password')
-
-        if 'atencao' in data:
-            raise ValidationError(
-                'Nao digite %(value)s no campo password',
-                code='invalid',
-                params={'value': '"atencao"'}
-            )
-
-        return data
-
-    def clean_first_name(self):
-        data = self.cleaned_data.get('first_name')
-
-        if 'anonino' in data:
-            raise ValidationError(
-                'Nao digite %(value)s no campo first name',
-                code='first_name',
-                params={'value': '"jefferson"'}
-            )
-
-        return data
 
     def clean(self):
         cleaned_data = super().clean()
