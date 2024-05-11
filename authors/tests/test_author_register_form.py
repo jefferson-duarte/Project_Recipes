@@ -13,7 +13,7 @@ class AuthorRegisterFormUnitTest(TestCase):
         ('last_name', 'Ex.: Doe'),
         ('first_name', 'Ex.: John'),
         ('password', 'Type your password'),
-        ('password2', 'Reapet your password'),
+        ('password2', 'Repeat your password'),
     ])
     def test_fields_placeholder(self, field, placeholder):
         form = RegisterForm()
@@ -71,7 +71,7 @@ class AuthorRegisterFormIntegrationTest(DjangoTestCase):
         ('first_name', 'Write your first name'),
         ('last_name', 'Write your last name'),
         ('password', 'Password must not be empty'),
-        ('password2', 'Please, reapet your password'),
+        ('password2', 'Please, repeat your password'),
         ('email', 'E-mail is required'),
     ])
     def test_fields_cannot_be_empty(self, field, msg):
