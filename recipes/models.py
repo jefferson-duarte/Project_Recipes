@@ -1,8 +1,9 @@
+from django.core.exceptions import ValidationError
+from collections import defaultdict
 from django.urls import reverse
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from django.contrib.contenttypes.fields import GenericRelation
 from tag.models import Tag
 
 
@@ -35,7 +36,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True
     )
-    tags = GenericRelation(Tag, related_query_name='recipes')
+    tags = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.title
@@ -49,3 +50,21 @@ class Recipe(models.Model):
             self.slug = slug
 
         return super().save(*args, **kwargs)
+
+    def clean(self) -> None:
+        error_messages = defaultdict(list)
+
+        recipe_from_db = Recipe.objects.filter(
+            title__iexact=self.title
+        ).first()
+
+        if recipe_from_db:
+            if recipe_from_db.pk != self.pk:
+                error_messages['title'].append(
+                    'Found recipes with the same title.'
+                )
+
+        if error_messages:
+            raise ValidationError(error_messages)
+
+        return super().clean()
