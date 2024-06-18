@@ -39,5 +39,10 @@ urlpatterns = [
         views.RecipeDetailsApi.as_view(),
         name='recipes_api_v1_detail',
     ),
+    path(
+        'recipes/api/v2/',
+        views.recipe_api_list,
+        name='recipes_api_v2',
+    ),
 
 ]

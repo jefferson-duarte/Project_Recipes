@@ -1,6 +1,8 @@
 from .test_recipe_base import RecipeTestBase, Recipe
 from django.core.exceptions import ValidationError
 from parameterized import parameterized
+from random import SystemRandom
+import string
 
 
 class RecipeModelTest(RecipeTestBase):
@@ -8,11 +10,18 @@ class RecipeModelTest(RecipeTestBase):
         self.recipe = self.make_recipe()
         return super().setUp()
 
+    def rand_strigs(self):
+        return ''.join(
+            SystemRandom().choices(
+                string.ascii_letters + string.digits, k=5
+            )
+        )
+
     def make_recipe_no_defaults(self):
         recipe = Recipe(
             category=self.make_category(name='Test Default Category'),
             author=self.make_author(username='newuser'),
-            title='Recipe Title',
+            title=f'Recipe Title {self.rand_strigs()}',
             description='Recipe Description',
             slug='recipe-slug-test',
             preparation_time=10,

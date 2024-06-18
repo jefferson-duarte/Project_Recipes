@@ -1,5 +1,5 @@
 from django.urls import reverse, resolve
-from recipes import views
+from recipes.views import site
 from .test_recipe_base import RecipeTestBase
 
 
@@ -8,7 +8,7 @@ class RecipeSearchViewsTest(RecipeTestBase):
         url = reverse('recipes:search')
         resolved = resolve(url)
 
-        self.assertIs(resolved.func.view_class, views.RecipeListViewSearch)
+        self.assertIs(resolved.func.view_class, site.RecipeListViewSearch)
 
     def test_recipe_search_loads_correct_templates(self):
         response = self.client.get(reverse('recipes:search') + '?q=test')
