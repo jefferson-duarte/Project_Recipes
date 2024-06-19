@@ -1,3 +1,5 @@
+from random import SystemRandom
+import string
 from django.db.models import F, Value
 from django.db.models.functions import Concat
 from django.core.exceptions import ValidationError
@@ -69,6 +71,13 @@ class Recipe(models.Model):
         if not self.slug:
             slug = f'{slugify(self.title)}'
             self.slug = slug
+            rand_letters = ''.join(
+                SystemRandom().choices(
+                    string.ascii_letters + string.digits,
+                    k=5,
+                )
+            )
+            self.slug = slugify(f'{self.title}-{rand_letters}')
 
         return super().save(*args, **kwargs)
 
